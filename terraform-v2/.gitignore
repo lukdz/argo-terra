@@ -1,0 +1,7 @@
+.terraform
+*.tfstate
+*.tfstate.backup
+google-cloud-sdk
+terraform.tfvars
+CLENUP.md
+TASK.md
