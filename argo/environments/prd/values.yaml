@@ -1,0 +1,6 @@
+replicaCount: 5
+environment: prd
+
+ingress:
+  hosts:
+    - host: api.prd.example.com

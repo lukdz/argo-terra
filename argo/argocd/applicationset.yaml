@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: spring-boot-api
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - cluster: dev-global-cluster-0
+        env: dev
+        namespace: spring-boot-api-dev
+      - cluster: prd-global-cluster-5
+        env: prd
+        namespace: spring-boot-api-prd
+  template:
+    metadata:
+      name: 'spring-boot-api-{{.env}}'
+    spec:
+      project: default
+      sources:
+      - repoURL: https://github.com/lukdz/argo-terra.git
+        targetRevision: HEAD
+        path: charts/spring-boot-api
+        helm:
+          valueFiles:
+          - $values/environments/{{.env}}/values.yaml
+      - repoURL: https://github.com/lukdz/argo-terra.git
+        targetRevision: HEAD
+        ref: values
+      destination:
+        name: '{{.cluster}}'
+        namespace: '{{.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

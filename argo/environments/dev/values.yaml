@@ -1,0 +1,6 @@
+replicaCount: 3
+environment: dev
+
+ingress:
+  hosts:
+    - host: api.dev.example.com
